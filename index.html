@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PhotoCraft Lite — 이미지 문구 편집기</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,'Noto Sans KR',sans-serif;background:#0e111a;color:#e9ecf5;color-scheme:dark}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}.side{background:#171b28;border-right:1px solid #303648;padding:23px;display:flex;flex-direction:column;gap:19px}.brand{font-size:23px;font-weight:800;letter-spacing:-.7px}.brand small{font-size:11px;color:#8d98b6;letter-spacing:1.8px}.desc{font-size:13px;color:#a8b1c7;line-height:1.5}.section{border-top:1px solid #2c3449;padding-top:17px}.section h2{font-size:13px;color:#c4cce0;margin:0 0 14px;font-weight:700;letter-spacing:.4px}.field{display:flex;flex-direction:column;gap:7px;margin:0 0 13px}.field label{color:#9da8c0;font-size:12px}.field input:not([type=range]):not([type=color]),.field textarea,.field select{width:100%;padding:10px 11px;border:1px solid #343b50;border-radius:8px;color:#f5f6ff;background:#101522;outline:none}.field input:focus,.field textarea:focus{border-color:#8c7cf7}.field textarea{resize:vertical;min-height:62px}.control{display:flex;gap:10px;align-items:center}.control input[type=range]{flex:1;min-width:0;accent-color:#9987fa}.value{min-width:50px;text-align:right;color:#d4d7f3;font-size:12px;font-variant-numeric:tabular-nums}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.color-control{display:flex;align-items:center;gap:12px}.color-control input{width:48px;height:38px;padding:3px;background:#0b1020;border:1px solid #343b50;border-radius:7px}.btn{border:1px solid #414965;border-radius:9px;padding:10px 12px;color:#e8eafa;background:#283047;font-weight:650}.btn:hover{background:#343d59}.primary{background:#735de2;border-color:#8473ed;color:white}.primary:hover{background:#8571f0}.rowbtn{display:flex;gap:8px}.rowbtn .btn{flex:1}.workspace{display:flex;flex-direction:column;min-width:0}.top{border-bottom:1px solid #2b3142;min-height:72px;padding:15px 25px;display:flex;align-items:center;justify-content:space-between;gap:10px}.top strong{font-size:15px}.top span{font-size:12px;color:#8e9ab5}.stage{flex:1;padding:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:490px;gap:16px;background:radial-gradient(circle,#191e2d 0%,#111522 80%)}.canvas-wrap{position:relative;display:inline-flex;max-width:100%;border:1px solid #3b445b;box-shadow:0 15px 50px #0006;background:#242a3a;touch-action:none}.canvas-wrap canvas{display:block;max-width:100%;max-height:68vh;width:auto;height:auto;object-fit:contain;cursor:grab}.canvas-wrap canvas:active{cursor:grabbing}.empty{width:min(100%,720px);min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1b2131;border:2px dashed #3b4764;border-radius:18px;gap:12px;color:#b4bfd6;cursor:pointer;text-align:center;padding:30px}.empty b{font-size:18px;color:#e5eafd}.empty strong{font-size:36px}.empty.drag{border-color:#9d8bff;background:#292745}.status{min-height:23px;color:#a6b4d0;font-size:13px;text-align:center}.status.error{color:#ff9e9e}.status.ok{color:#8bdfbc}.footer{font-size:12px;color:#7f8ba4;text-align:center;padding:16px}.tip{font-size:12px;color:#a9b4cc;text-align:center;line-height:1.6}.disabled{opacity:.5;pointer-events:none}@media(max-width:760px){.app{grid-template-columns:1fr}.side{order:2;border-right:0;border-top:1px solid #343d50}.stage{min-height:370px;padding:15px}.top{padding:14px}.empty{min-height:240px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+ <div><div class="brand">◩ PhotoCraft <small>LITE</small></div><p class="desc">이미지를 불러와 문구를 편집하세요.<br>모든 처리는 브라우저 안에서 이루어집니다.</p></div>
+ <section class="section"><h2>01 · 이미지</h2><div class="rowbtn"><button class="btn primary" id="uploadBtn">＋ 이미지 불러오기</button></div><input id="fileInput" type="file" accept="image/png,image/jpeg,.png,.jpg,.jpeg" hidden><p class="desc">PNG, JPG, JPEG 지원 · 드래그 앤 드롭 가능</p><div id="fileName" class="desc">선택된 파일 없음</div></section>
+ <section class="section"><h2>02 · 문구 편집</h2><div class="field"><label for="caption">문구</label><textarea id="caption" spellcheck="false">여기에 문구를 입력하세요</textarea></div><div class="field"><label for="font">글꼴</label><select id="font"><option value="sans-serif">기본 고딕</option><option value="serif">명조</option><option value="monospace">고정폭</option><option value="cursive">필기체</option></select></div><div class="field"><label for="size">크기 (px)</label><div class="control"><input type="range" min="8" max="240" value="64" id="size"><span id="sizeValue" class="value">64 px</span></div></div><div class="field"><label>위치 (이미지 너비·높이의 %)</label><div class="pair"><div><label for="posX">X</label><div class="control"><input type="range" min="0" max="100" value="50" id="posX"><span id="xValue" class="value">50%</span></div></div><div><label for="posY">Y</label><div class="control"><input type="range" min="0" max="100" value="50" id="posY"><span id="yValue" class="value">50%</span></div></div></div></div><div class="field"><label for="color">문구 색상</label><div class="color-control"><input type="color" id="color" value="#ffffff"><span id="colorValue">#FFFFFF</span></div></div><div class="field"><label for="stroke">윤곽선</label><div class="control"><input type="checkbox" id="stroke" checked><label for="stroke">검정 테두리 추가</label></div></div></section>
+ <section class="section"><h2>03 · 내보내기</h2><div class="rowbtn"><button class="btn primary" id="savePng">PNG 저장</button><button class="btn" id="saveJpeg">JPEG 저장</button></div><p class="desc">원본 파일은 수정하지 않습니다.</p></section>
+</aside>
+<main class="workspace"><header class="top"><strong>캔버스 편집기</strong><span id="dimensions">이미지 미선택</span></header><div class="stage" id="dropZone"><div class="empty" id="empty"><strong>▧</strong><b>편집할 이미지를 놓으세요</b><span>여기를 클릭하거나 PNG/JPEG 파일을 드래그하세요</span></div><div id="canvasWrap" class="canvas-wrap" hidden><canvas id="canvas" width="900" height="560" aria-label="편집 이미지 미리보기"></canvas></div><div id="status" class="status" role="status" aria-live="polite"></div><div class="tip">미리보기의 문구를 마우스 또는 손가락으로 드래그해 위치를 이동할 수 있습니다.<br>왼쪽 컨트롤의 변경도 즉시 반영됩니다.</div></div><footer class="footer">PhotoCraft Lite · Vanilla JavaScript · Canvas API</footer></main>
+</div>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const canvas=$('canvas'),ctx=canvas.getContext('2d');
+let image=null, imageName='', dragPointer=null;
+const fields={text:$('caption'),font:$('font'),size:$('size'),x:$('posX'),y:$('posY'),color:$('color'),stroke:$('stroke')};
+function notify(message='',type=''){const node=$('status');node.textContent=message;node.className='status '+type;}
+function updateLabels(){ $('sizeValue').textContent=fields.size.value+' px';$('xValue').textContent=fields.x.value+'%';$('yValue').textContent=fields.y.value+'%';$('colorValue').textContent=fields.color.value.toUpperCase();}
+function renderTo(context,width,height,fillWhite=false){
+ context.save();context.clearRect(0,0,width,height);
+ if(fillWhite){context.fillStyle='#ffffff';context.fillRect(0,0,width,height);}
+ if(image)context.drawImage(image,0,0,width,height);
+ const txt=fields.text.value;
+ if(txt){let fontSize=+fields.size.value; context.textAlign='center';context.textBaseline='middle';context.font=`bold ${fontSize}px ${fields.font.value}`;context.lineJoin='round';context.miterLimit=2;
+ const lines=txt.split('\n'),lineHeight=fontSize*1.22,startY=height*(+fields.y.value/100)-(lines.length-1)*lineHeight/2;
+ for(let i=0;i<lines.length;i++){const x=width*(+fields.x.value/100),y=startY+i*lineHeight;
+ if(fields.stroke.checked){context.strokeStyle='#000000';context.lineWidth=Math.max(2,fontSize*.085);context.strokeText(lines[i],x,y);}
+ context.fillStyle=fields.color.value;context.fillText(lines[i],x,y);}}
+ context.restore();
+}
+function render(){updateLabels();if(image){renderTo(ctx,canvas.width,canvas.height);}}
+Object.values(fields).forEach(el=>el.addEventListener('input',render));
+$('uploadBtn').addEventListener('click',()=>$('fileInput').click());$('empty').addEventListener('click',()=>$('fileInput').click());
+$('fileInput').addEventListener('change',async e=>{const file=e.target.files?.[0];if(file)await openFile(file);e.target.value='';});
+function signature(bytes){return bytes.length>=8&&bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71&&bytes[4]===13&&bytes[5]===10&&bytes[6]===26&&bytes[7]===10?'png':(bytes.length>=3&&bytes[0]===255&&bytes[1]===216&&bytes[2]===255?'jpeg':null);}
+async function openFile(file){
+ const name=file?.name||'알 수 없는 파일'; const ext=(name.split('.').pop()||'').toLowerCase();
+ if(!['png','jpg','jpeg'].includes(ext)){notify(`“${name}” 거부: 지원하지 않는 확장자입니다. PNG 또는 JPEG를 선택하세요. 기존 작업은 유지됩니다.`,'error');return;}
+ if(file.size===0){notify(`“${name}” 거부: 빈 파일입니다. 기존 작업은 유지됩니다.`,'error');return;}
+ if(file.size>60*1024*1024){notify(`“${name}” 거부: 파일 크기가 60MB를 초과했습니다. 기존 작업은 유지됩니다.`,'error');return;}
+ let decoded=null;
+ try{
+ const header=new Uint8Array(await file.slice(0,8).arrayBuffer());const kind=signature(header);
+ if(!kind || (kind==='png'&&ext!=='png') || (kind==='jpeg'&&!['jpg','jpeg'].includes(ext))){notify(`“${name}” 거부: 파일 형식이 확장자와 일치하지 않거나 올바른 PNG/JPEG가 아닙니다. 기존 작업은 유지됩니다.`,'error');return;}
+ decoded=await createImageBitmap(file);
+ if(!decoded.width||!decoded.height||decoded.width*decoded.height>55000000)throw new Error('이미지 크기가 너무 크거나 올바르지 않습니다.');
+ // 검증과 디코딩에 성공한 뒤에만 원본 작업을 교체한다.
+ const previous=image;image=decoded;imageName=name;canvas.width=decoded.width;canvas.height=decoded.height;
+ $('empty').hidden=true;$('canvasWrap').hidden=false;$('fileName').textContent=name;$('dimensions').textContent=`${decoded.width} × ${decoded.height} px`;render();notify(`“${name}” 불러오기 성공`,'ok');
+ if(previous&&typeof previous.close==='function')previous.close();
+ }catch(error){if(decoded&&decoded!==image)decoded.close();notify(`“${name}” 거부: 이미지를 읽을 수 없습니다. ${error.message||'손상된 파일일 수 있습니다.'} 기존 작업은 유지됩니다.`,'error');}
+}
+const dropZone=$('dropZone');
+document.addEventListener('dragover',e=>{e.preventDefault();});document.addEventListener('drop',e=>{e.preventDefault();});
+dropZone.addEventListener('dragenter',e=>{e.preventDefault();$('empty').classList.add('drag');});dropZone.addEventListener('dragleave',e=>{if(!dropZone.contains(e.relatedTarget))$('empty').classList.remove('drag');});
+dropZone.addEventListener('drop',async e=>{e.preventDefault();$('empty').classList.remove('drag');if(e.dataTransfer?.files?.length)await openFile(e.dataTransfer.files[0]);});
+function moveCaption(event){const rect=canvas.getBoundingClientRect();if(!rect.width||!rect.height)return; const x=Math.min(100,Math.max(0,Math.round((event.clientX-rect.left)/rect.width*100)));const y=Math.min(100,Math.max(0,Math.round((event.clientY-rect.top)/rect.height*100)));fields.x.value=x;fields.y.value=y;render();}
+canvas.addEventListener('pointerdown',e=>{if(!image)return;dragPointer=e.pointerId;canvas.setPointerCapture(e.pointerId);moveCaption(e);});canvas.addEventListener('pointermove',e=>{if(dragPointer===e.pointerId)moveCaption(e);});canvas.addEventListener('pointerup',()=>{dragPointer=null;});canvas.addEventListener('pointercancel',()=>{dragPointer=null;});
+function save(mime,ext){if(!image){notify('먼저 PNG 또는 JPEG 이미지를 불러오세요.','error');return;}const output=document.createElement('canvas');output.width=canvas.width;output.height=canvas.height;renderTo(output.getContext('2d'),output.width,output.height,mime==='image/jpeg');output.toBlob(blob=>{if(!blob){notify('파일을 생성하지 못했습니다.','error');return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(imageName.replace(/\.[^.]+$/,'')||'photo')+'_edited.'+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);notify(`${ext.toUpperCase()} 파일로 저장했습니다.`,'ok');},mime,mime==='image/jpeg'?.92:undefined);}
+$('savePng').addEventListener('click',()=>save('image/png','png'));$('saveJpeg').addEventListener('click',()=>save('image/jpeg','jpg'));updateLabels();
+</script>
+</body>
+</html>
